@@ -1,0 +1,54 @@
+2017-01-21T05:29:55.186019916 0.220318s notice: Recursively removing directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data/tmp
+2017-01-21T05:29:55.202690538 0.236986s notice: Initializing directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data
+2017-01-21T05:29:55.202849648 0.237145s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data' did not already exist or is empty.)
+2017-01-21T05:29:55.202909604 0.237204s notice: Running rethinkdb 2.3.5~0xenial (GCC 5.3.1)...
+2017-01-21T05:29:55.210060047 0.244358s notice: Running on Linux 4.4.0-59-generic x86_64
+2017-01-21T05:29:55.210142593 0.244437s notice: Loading data from directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data
+2017-01-21T05:29:55.277290900 0.311586s info: Automatically using cache size of 1197 MB
+2017-01-21T05:29:55.279362431 0.313657s notice: Listening for intracluster connections on port 29015
+2017-01-21T05:29:55.282645753 0.316940s notice: Listening for client driver connections on port 28015
+2017-01-21T05:29:55.283000858 0.317295s notice: Listening for administrative HTTP connections on port 8080
+2017-01-21T05:29:55.283004188 0.317298s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T05:29:55.283007702 0.317302s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T05:29:55.283010309 0.317305s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T05:29:55.283013812 0.317308s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2017-01-21T05:29:55.283017339 0.317312s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
+2017-01-21T05:30:23.692607260 28.726903s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2017-01-21T05:30:23.692880379 28.727176s notice: Shutting down client connections...
+2017-01-21T05:30:23.694582244 28.728878s notice: All client connections closed.
+2017-01-21T05:30:23.694612978 28.728908s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2017-01-21T05:30:23.695977450 28.730273s notice: Storage engine shut down.
+2017-01-21T05:31:10.492150171 0.073657s notice: Running rethinkdb 2.3.5~0xenial (GCC 5.3.1)...
+2017-01-21T05:31:10.505663028 0.087179s notice: Running on Linux 4.4.0-59-generic x86_64
+2017-01-21T05:31:10.505970753 0.087477s notice: Loading data from directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data
+2017-01-21T05:31:10.538192687 0.119699s info: Automatically using cache size of 1194 MB
+2017-01-21T05:31:10.538876387 0.120382s notice: Listening for intracluster connections on port 29015
+2017-01-21T05:31:10.541107073 0.122613s notice: Listening for client driver connections on port 28015
+2017-01-21T05:31:10.541297603 0.122804s notice: Listening for administrative HTTP connections on port 8080
+2017-01-21T05:31:10.541302837 0.122809s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T05:31:10.541305990 0.122812s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T05:31:10.541309811 0.122816s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T05:31:10.541311910 0.122818s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2017-01-21T05:31:10.541315325 0.122821s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
+2017-01-21T05:38:28.394378119 437.975884s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Added replica on this server.
+2017-01-21T05:38:28.394412774 437.975919s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Starting a new Raft election for term 1.
+2017-01-21T05:38:28.414851507 437.996358s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: This server is Raft leader for term 1. Latest log index is 0.
+2017-01-21T08:23:57.185754094 10366.767262s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2017-01-21T08:23:57.186123670 10366.767631s notice: Shutting down client connections...
+2017-01-21T08:23:57.194382911 10366.775889s notice: All client connections closed.
+2017-01-21T08:23:57.194393153 10366.775899s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2017-01-21T08:23:57.197891560 10366.779398s notice: Storage engine shut down.
+2017-01-21T08:23:58.492008679 0.041038s notice: Running rethinkdb 2.3.5~0xenial (GCC 5.3.1)...
+2017-01-21T08:23:58.500661906 0.049698s notice: Running on Linux 4.4.0-59-generic x86_64
+2017-01-21T08:23:58.500923993 0.049953s notice: Loading data from directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data
+2017-01-21T08:23:58.537158443 0.086187s info: Automatically using cache size of 858 MB
+2017-01-21T08:23:58.538387445 0.087416s notice: Listening for intracluster connections on port 29015
+2017-01-21T08:23:58.551942835 0.100971s notice: Listening for client driver connections on port 28015
+2017-01-21T08:23:58.552657976 0.101687s notice: Listening for administrative HTTP connections on port 8080
+2017-01-21T08:23:58.552662102 0.101690s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T08:23:58.552664581 0.101693s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T08:23:58.552667590 0.101696s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T08:23:58.552680866 0.101709s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2017-01-21T08:23:58.552684356 0.101712s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
+2017-01-21T08:24:00.006135935 1.555165s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Starting a new Raft election for term 2.
+2017-01-21T08:24:00.025046011 1.574076s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: This server is Raft leader for term 2. Latest log index is 3.
