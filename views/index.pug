@@ -15,6 +15,24 @@ block content
         });
       });
     });
+    /**
+     * For testing if basic geolocation functionality is working
+     */
+    getLocation();
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            console.log( "Geolocation is not supported by this browser." );
+        }
+    }
+    function showPosition(position) {
+        console.log("Location object received");
+        console.log( "Latitude: " + position.coords.latitude +
+                ", Longitude: " + position.coords.longitude  +
+                ", Accuracy " + position.coords.accuracy);
+    }
+
   //- div.top
   //-   form.form-horizontal(method="post", id="loginForm")
   //-     label Username
@@ -37,9 +55,9 @@ block content
   //-           td Hello
   //-           td World
 
-  div.container
+  div.container-fluid
     div.row
-      div.col-lg-6.col-md-4
+      div.col-lg-3.col-md-4
         div.card.text-center
           div.card-block
             h3.card-title.mb-3 People are protesting.
@@ -48,12 +66,15 @@ block content
               div.col-md-10.offset-md-1
                 form#pingForm
                   div.form-group
-                    input#protestDescription.form-control.text-center(type="text", name="protestDescription", placeholder="Why?")
-                  div.form-group
-                    input#protestLocation.form-control.text-center(type="text", name="protestLocation", placeholder="Where?")
+                    input#protestDescription.form-control(type="text", name="protestDescription", placeholder="Why?")
+                  div.form-group.input-group
+                    input#protestLocation.form-control(type="text", name="protestLocation", placeholder="Where?")
+                    span.input-group-btn
+                      button.btn.btn-secondary(type="button")
+                        img(src="assets/icons/location.svg")
                   div.form-group
                     button.btn.btn-primary.btn-block(type="submit") Submit
-      div.col-lg-6.col-md-8
+      div.col-lg-9.col-md-8
         div.card
           div.card.block
             div#map

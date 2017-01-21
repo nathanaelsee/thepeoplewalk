@@ -46,7 +46,7 @@ html
             var map = new Map("map", {
                basemap: "gray",
                center: [-100, 39], // lon, lat
-               zoom: 5
+               zoom: 4
             });
 
             //Do not provide a srcNode dom for the Search widget as the UI is not displayed. 
@@ -60,7 +60,7 @@ html
 
             search.startup();
 
-            registry.byId("searchValue").on("click", doSearchValue);
+            //- registry.byId("searchValue").on("click", doSearchValue);
 
             function doSearchValue() {
 
@@ -77,7 +77,7 @@ html
                search.sources[0].labelSymbol = ls; //set the text symbol for the label
 
                //If multiple results are found, it will default and select the first.
-               search.search("Miami");
+               search.search("lel");
             }
          }
       );
