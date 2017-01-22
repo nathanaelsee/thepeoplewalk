@@ -87,3 +87,8 @@
 2017-01-21T23:30:59.358973209 0.424805s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
 2017-01-21T23:31:01.289192857 2.355026s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Starting a new Raft election for term 4.
 2017-01-21T23:31:01.307079256 2.372913s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: This server is Raft leader for term 4. Latest log index is 9.
+2017-01-22T09:45:19.578645769 36860.644479s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2017-01-22T09:45:19.578868594 36860.644701s notice: Shutting down client connections...
+2017-01-22T09:45:19.582546336 36860.648380s notice: All client connections closed.
+2017-01-22T09:45:19.582558151 36860.648390s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2017-01-22T09:45:19.599006245 36860.664839s notice: Storage engine shut down.

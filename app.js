@@ -6,13 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer();
-var r = require('rethinkdbdash')();
+// var r = require('rethinkdbdash')();
 
-var connection = null;
-r.connect( {host: 'localhost', port: 28015, db: 'thepeoplewalk'}, function(err, conn) {
-    if (err) throw err;
-    connection = conn;
-});
+// var connection = null;
+// r.connect( {host: 'localhost', port: 28015, db: 'thepeoplewalk'}, function(err, conn) {
+//     if (err) throw err;
+//     connection = conn;
+// });
 
 var index = require('./routes/index');
 
@@ -39,20 +39,20 @@ app.use('/', index);
 
 // app.use(express.bodyParser());
 
-app.post('/', function(req, res) {
-  console.log(req.body);
-  var data = {
-    timestamp: r.now(),
-    location: "",
-    description: req.body.protestDescription,
-    classification: ""
-  };
-  r.table('ping').insert(data).run(connection, function(err, result) {
-    if (err) throw err;
-    console.log(JSON.stringify(result, null, 2));
-  });
-  res.sendStatus(200);
-});
+// app.post('/', function(req, res) {
+//   console.log(req.body);
+//   var data = {
+//     timestamp: r.now(),
+//     location: "",
+//     description: req.body.protestDescription,
+//     classification: ""
+//   };
+//   r.table('ping').insert(data).run(connection, function(err, result) {
+//     if (err) throw err;
+//     console.log(JSON.stringify(result, null, 2));
+//   });
+//   res.sendStatus(200);
+// });
 
 function startExpress(connection) {
   app._rdbConn = connection;
