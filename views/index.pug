@@ -2,6 +2,118 @@ extends layout
 
 block content
   script.
+
+    //- var suggestions = new Bloodhound({
+    //-   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    //-   queryTokenizer: Bloodhound.tokenizers.whitespace,
+    //-   //- prefetch: '../data/films/post_1960.json',
+    //-   remote: {
+    //-     url: 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?text=%QUERY',
+    //-     wildcard: '%QUERY'
+    //-   }
+    //- });
+
+    $(document).ready(function() {
+
+      // ********** ESRI ArcGIS Functions ********** //
+      require([
+        "esri/map",
+        "esri/dijit/Search",
+        "esri/tasks/locator",
+        "dojo/domReady!"
+
+      ], function (Map, Search, Locator) {
+        var map = new Map("map", {
+          basemap: "gray",
+          center: [-120.435, 46.159], // lon, lat
+          zoom: 7
+        });
+
+        var locator = new Locator("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates");
+
+      });
+      // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
+
+      var asyncResults = function() {
+        console.log("wat");
+      };
+
+      // ********** Typeahead ********** //
+      var substringMatcher = function() {
+        return function(q, cb) {
+          var arr = [];
+          $.get(
+            // URL
+            "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest",{
+            // data
+              text: $('#protestLocation').val(),
+              f: "json"
+            }, function(data) {
+            // function if success
+              console.log(data.suggestions);
+              for (var i = 0; i < data.suggestions.length; i++) {
+                console.log(data.suggestions[i]);
+                arr.push(data.suggestions[i].text);
+              }
+              console.log(arr);
+              cb(["a","b"]);
+            },
+            // dataType
+            'json'
+          );
+          //- cb(["a","b"]);
+        };
+      };
+
+      var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+        'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+        'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+        'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+        'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+        'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+        'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+        'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+      ];
+
+      $('#protestLocation').typeahead({
+        highlight: true
+      }, {
+        name: 'suggestions',
+        limit: 11,
+        display: 'text',
+        source: function(query, syncResults, asyncResults) {
+          $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
+            text: $('#protestLocation').val(),
+            f: "json",
+            maxSuggestions: 3
+          }, function(data) {
+            console.log(data.suggestions);
+            asyncResults(data.suggestions);
+          }, 'json');
+        },
+      });
+
+      //- // Searchbar Listener
+      //- $('#protestLocation').keyup(function() {
+      //-   $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
+      //-     text: $('#protestLocation').val(),
+      //-     f: "json"
+      //-   }, function(data) {
+      //-     console.log(data);
+      //-     $('#protestLocation .typeahead').typeahead({
+      //-       hint: true,
+      //-       highlight: true,
+      //-       minLength: 1
+      //-     },
+      //-     {
+      //-       name: 'states',
+      //-       source: substringMatcher(states)
+      //-     });
+      //-   });
+      //- });
+      // !!!!!!!!!! Typeahead !!!!!!!!!! //
+    });
     $(function() {
       $('#pingForm').submit(function(event) {
         //- console.log($('#protestDescription').val());
@@ -15,23 +127,6 @@ block content
         });
       });
     });
-    /**
-     * For testing if basic geolocation functionality is working
-     */
-    getLocation();
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            console.log( "Geolocation is not supported by this browser." );
-        }
-    }
-    function showPosition(position) {
-        console.log("Location object received");
-        console.log( "Latitude: " + position.coords.latitude +
-                ", Longitude: " + position.coords.longitude  +
-                ", Accuracy " + position.coords.accuracy);
-    }
 
   //- div.top
   //-   form.form-horizontal(method="post", id="loginForm")
@@ -56,8 +151,8 @@ block content
   //-           td World
 
   div.container-fluid
-    div.row
-      div.col-lg-3.col-md-4
+    div.row.d-flex
+      div.col-lg-4.col-md-5.align-self-center
         div.card.text-center
           div.card-block
             h3.card-title.mb-3 People are protesting.
@@ -68,15 +163,17 @@ block content
                   div.form-group
                     input#protestDescription.form-control(type="text", name="protestDescription", placeholder="Why?")
                   div.form-group.input-group
-                    input#protestLocation.form-control(type="text", name="protestLocation", placeholder="Where?")
+                    input#protestLocation.form-control.typeahead(type="text", name="protestLocation", placeholder="Where?")
                     span.input-group-btn
                       button.btn.btn-secondary(type="button")
                         img(src="assets/icons/location.svg")
                   div.form-group
                     button.btn.btn-primary.btn-block(type="submit") Submit
-      div.col-lg-9.col-md-8
+      div.col-lg-8.col-md-7
         div.card
           div.card.block
             div#map
 
   div.footer
+
+  //- script(src='/js/bootstrap3-typeahead.js')

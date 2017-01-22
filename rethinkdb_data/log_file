@@ -52,3 +52,38 @@
 2017-01-21T08:23:58.552684356 0.101712s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
 2017-01-21T08:24:00.006135935 1.555165s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Starting a new Raft election for term 2.
 2017-01-21T08:24:00.025046011 1.574076s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: This server is Raft leader for term 2. Latest log index is 3.
+2017-01-21T16:28:16.201799846 12509.390022s notice: Server got SIGTERM from pid 1, uid 0; shutting down...
+2017-01-21T16:28:16.201873818 12509.390095s notice: Shutting down client connections...
+2017-01-21T16:28:16.209339154 12509.397561s notice: All client connections closed.
+2017-01-21T16:28:16.209348317 12509.397570s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2017-01-21T16:28:16.213688338 12509.401910s notice: Storage engine shut down.
+2017-01-21T16:31:13.619612258 0.280776s notice: Running rethinkdb 2.3.5~0xenial (GCC 5.3.1)...
+2017-01-21T16:31:13.627335184 0.288501s notice: Running on Linux 4.4.0-59-generic x86_64
+2017-01-21T16:31:13.627744325 0.288908s notice: Loading data from directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data
+2017-01-21T16:31:13.658704999 0.319869s info: Automatically using cache size of 2944 MB
+2017-01-21T16:31:13.660286021 0.321450s notice: Listening for intracluster connections on port 29015
+2017-01-21T16:31:13.689726605 0.350890s notice: Listening for client driver connections on port 28015
+2017-01-21T16:31:13.690122653 0.351287s notice: Listening for administrative HTTP connections on port 8080
+2017-01-21T16:31:13.690125689 0.351289s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T16:31:13.690127682 0.351291s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T16:31:13.690129326 0.351293s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T16:31:13.690142132 0.351306s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2017-01-21T16:31:13.690144541 0.351308s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
+2017-01-21T16:31:14.966414250 1.627578s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Starting a new Raft election for term 3.
+2017-01-21T16:31:14.977916201 1.639080s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: This server is Raft leader for term 3. Latest log index is 6.
+2017-01-21T23:25:55.009525294 24881.670689s notice: Server got SIGTERM from pid 1, uid 0; shutting down...
+2017-01-21T23:25:55.009703743 24881.670868s notice: Shutting down client connections...
+2017-01-21T23:30:59.215222474 0.281055s notice: Running rethinkdb 2.3.5~0xenial (GCC 5.3.1)...
+2017-01-21T23:30:59.226321852 0.292162s notice: Running on Linux 4.4.0-59-generic x86_64
+2017-01-21T23:30:59.226652993 0.292486s notice: Loading data from directory /home/mike/Dropbox/Dev/thepeoplewalk/rethinkdb_data
+2017-01-21T23:30:59.307351720 0.373184s info: Automatically using cache size of 2158 MB
+2017-01-21T23:30:59.312006641 0.377839s notice: Listening for intracluster connections on port 29015
+2017-01-21T23:30:59.358780025 0.424612s notice: Listening for client driver connections on port 28015
+2017-01-21T23:30:59.358956453 0.424788s notice: Listening for administrative HTTP connections on port 8080
+2017-01-21T23:30:59.358959514 0.424791s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T23:30:59.358962270 0.424794s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T23:30:59.358966659 0.424798s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2017-01-21T23:30:59.358969092 0.424801s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2017-01-21T23:30:59.358973209 0.424805s notice: Server ready, "mike_XPS_13_9350_p3o" 4dbe021a-d899-442f-9ff8-4b0a354d1894
+2017-01-21T23:31:01.289192857 2.355026s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: Starting a new Raft election for term 4.
+2017-01-21T23:31:01.307079256 2.372913s info: Table db0a223e-9fb5-4965-a997-572d3ea7a1bb: This server is Raft leader for term 4. Latest log index is 9.
