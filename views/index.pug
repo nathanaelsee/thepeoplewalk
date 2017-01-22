@@ -111,9 +111,6 @@ block content
         $('.typeahead').typeahead('close');
         esri_magicKey = suggestion.magicKey;
         esri_singleLine = suggestion.text;
-      });
-      
-      $('#locationButton').click(function(event) {
         $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates", {
           singleLine: esri_singleLine,
           magicKey: esri_magicKey,
@@ -121,14 +118,44 @@ block content
         }, function(data) {
           point.setX(data.candidates[0].location.x);
           point.setY(data.candidates[0].location.y);
-          map.centerAndZoom(point, 10);
+          map.centerAndZoom(point, 12);
         }, 'json');
       });
+      
+      //- $('#locationButton').click(function(event) {
+      //-   if (navigator.geolocation) {
+      //-     navigator.geolocation.getCurrentPosition(function(position) {
+      //-       point.setX(position.coords.longitude);
+      //-       point.setY(position.coords.latitude);
+      //-       map.centerAndZoom(point, 12);
+
+      //-       //- var token = "kvcup3ZWQcjoJ2sUSOJnms33jL4B232BaGIzwFyzQkq3arNWAJGZUJrdpQvr2zb0j8CHPkXrBzH3VG8kg7m28zB8u5f8Yby8za9I7eChPBy0fitpZ5nAdNGD3aMwcweFLEEeuyXpVa50gjAhQ4XjLA..;"
+      //-       var pt = new Point(position.coords.longitude, position.coords.latitude);
+      //-       //- var location = { x: point.getLongitude(), y: point.getLatitude() };
+      //-       //- data = "f=json&location=" + JSON.stringify(location);
+      //-       //- var url = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + point.getLatitude() + "%2C" + point.getLongitude();
+
+      //-       console.log(url);
+      //-       $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode", {
+      //-         f: "json",
+      //-         location: pt,
+      //-       }, function(resp) {
+      //-         console.log(resp);
+      //-         //- $('#protestLocation').val(data.address.Address);
+      //-       }, 'json');
+      //-     });
+      //-   }
+      //- });
 
       $('#pingForm').submit(function(event) {
         event.preventDefault();
 
         // validation
+        console.log(point.getLongitude());
+        if (point.getLongitude() == null) {
+          $('#locationGroup').addClass("has-warning");
+          return;
+        }
 
         var xy = llToXY(point.getLongitude(), point.getLatitude());
         var geom = { x: xy[0], y: xy[1] }; 
@@ -164,9 +191,9 @@ block content
                 form#pingForm
                   div.form-group
                     input#protestDescription.form-control(type="text", name="protestDescription", placeholder="Why?")
-                  div.form-group.input-group
-                    input#protestLocation.form-control.typeahead(type="text", name="protestLocation", placeholder="Where?")
-                    span.input-group-btn
+                  div#locationGroup.form-group.input-group
+                    input#protestLocation.form-control.typeahead.form-control-warning(type="text", name="protestLocation", placeholder="Where?")
+                    //- span.input-group-btn
                       button#locationButton.btn.btn-secondary(type="button")
                         img(src="assets/icons/location.svg")
                   div.form-group
