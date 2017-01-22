@@ -18,18 +18,62 @@ block content
       // ********** ESRI ArcGIS Functions ********** //
       require([
         "esri/map",
-        "esri/dijit/Search",
-        "esri/tasks/locator",
+        "esri/Color",
+        "esri/layers/FeatureLayer",
+        "esri/renderers/SimpleRenderer",
         "dojo/domReady!"
 
-      ], function (Map, Search, Locator) {
+      ], function (Map, Color, FeatureLayer, SimpleRenderer) {
+
+        var pingLayer = new FeatureLayer("https://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0", {
+          mode: FeatureLayer.MODE_ONDEMAND,
+          id: "pings"
+        });
+        var maxTime = new Date().getTime();
+        var minTime = maxTime- 604800000;
+        console.log(maxTime);
+
         var map = new Map("map", {
-          basemap: "gray",
-          center: [-120.435, 46.159], // lon, lat
-          zoom: 7
+          basemap: "dark-gray",
+          center: [-119.11, 36.65],
+          zoom: 6
         });
 
-        var locator = new Locator("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates");
+        var renderer = new SimpleRenderer({});
+        renderer.setVisualVariables([
+        {
+          "type": "sizeInfo",
+          "field": "time",
+          "minDataValue": minTime,
+          "maxDataValue": maxTime,
+
+          "minSize": {
+            "type": "sizeInfo",
+            "expression": "view.scale",
+            "stops": [{"value": minTime, "size": 5}]
+          },
+
+          "maxSize": {
+            "type": "sizeInfo",
+            "expression": "view.scale",
+            "stops": [{"value": maxTime, "size": 50}]
+          }
+        },
+        //-{
+        //-  "type": "opacityInfo",
+        //-  "field": "time",
+        //-  "stops": [{"value": minTime, "opacity": 0},
+        //-            {"value": maxTime, "opacity": 100}]
+        //-},
+        {
+          "type": "colorInfo",
+          "field": "time",
+          "colors": [new Color([255, 0, 0]), new Color([255, 255, 0])]
+        }]);
+
+        //-pingLayer.setRenderer(renderer);
+
+        map.addLayer(pingLayer);
 
       });
       // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
