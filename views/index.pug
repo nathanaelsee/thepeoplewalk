@@ -2,17 +2,25 @@ extends layout
 
 block content
   script.
-    $(function() {
 
-      // ********** ESRI ArcGIS Functions ********** //
+    // GLOBALS
+    var map;
+    var point;
+    var esri_singleLine;
+    var esri_magicKey;
+
+    $(function() {
+    // ********** ESRI ArcGIS Functions ********** //
+
       require([
         "esri/map",
+        "esri/geometry/Point",
         "esri/Color",
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
         "dojo/domReady!"
 
-      ], function (Map, Color, FeatureLayer, SimpleRenderer) {
+      ], function (Map, Point, Color, FeatureLayer, SimpleRenderer) {
 
         var pingLayer = new FeatureLayer("https://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0", {
           mode: FeatureLayer.MODE_ONDEMAND,
@@ -22,11 +30,13 @@ block content
         var minTime = maxTime- 604800000;
         console.log(maxTime);
 
-        var map = new Map("map", {
+        map = new Map("map", {
           basemap: "dark-gray",
           center: [-119.11, 36.65],
           zoom: 6
         });
+
+        point = new Point(-118.15, 33.80);
 
         var renderer = new SimpleRenderer({});
         renderer.setVisualVariables([
@@ -63,13 +73,15 @@ block content
         //-pingLayer.setRenderer(renderer);
 
         map.addLayer(pingLayer);
-
       });
-      // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
+    
+    // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
 
-      // ********** Typeahead ********** //
+    // ********** Typeahead ********** //
+
       $('#protestLocation').typeahead({
-        highlight: true
+        highlight: true,
+        minLength: 3
       }, {
         name: 'suggestions',
         limit: 11,
@@ -83,24 +95,53 @@ block content
             console.log(data.suggestions);
             asyncResults(data.suggestions);
           }, 'json');
-        },
+        }
       });
-      // !!!!!!!!!! Typeahead !!!!!!!!!! //
+    
+    // !!!!!!!!!! Typeahead !!!!!!!!!! //
+
+    // ********** Events ********** //
+
+      $('.typeahead').on('typeahead:select typeahead:autocomplete', function(event, suggestion) {
+        $('.typeahead').typeahead('close');
+        esri_magicKey = suggestion.magicKey;
+        esri_singleLine = suggestion.text;
+        console.log(esri_magicKey);
+        console.log(esri_singleLine);
+      });
+      
+      $('#locationButton').click(function(event) {
+        $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates", {
+          singleLine: esri_singleLine,
+          magicKey: esri_magicKey,
+          f: "json"
+        }, function(data) {
+          point.setX(data.candidates[0].location.x);
+          point.setY(data.candidates[0].location.y);
+          map.centerAndZoom(point, 10);
+        }, 'json');
+      });
+
+      $('#pingForm').submit(function(event) {
+        event.preventDefault(); // Stops browser from navigating away from page
+        var features = [{
+          geometry: { x: point.x, y: point.y },
+          attributes: {
+            purpose: $('#protestDescription').val(),
+            time: $.now()
+          }
+        }];
+        data = "f=json&features=" + JSON.stringify(features);
+        // build a json object or do something with the form, store in data
+        $.post("http://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0/addFeatures", data, function(resp) {
+          console.log(resp);
+        }, 'json');
+      });
+
+    // !!!!!!!!!! Events !!!!!!!!!! //
+
     });
 
-    $(function() {
-      $('#pingForm').submit(function(event) {
-        //- console.log($('#protestDescription').val());
-        event.preventDefault(); // Stops browser from navigating away from page
-        //- var data = $("#protestDescription").serialize();
-        var data = $('#protestLocation').typeahead('val');
-        console.log(data);
-        // build a json object or do something with the form, store in data
-        $.post('/', data, function(resp) {
-          console.log(data);
-        });
-      });
-    });
 
   div.container-fluid
     div.row.d-flex
@@ -116,7 +157,7 @@ block content
                   div.form-group.input-group
                     input#protestLocation.form-control.typeahead(type="text", name="protestLocation", placeholder="Where?")
                     span.input-group-btn
-                      button.btn.btn-secondary(type="button")
+                      button#locationButton.btn.btn-secondary(type="button")
                         img(src="assets/icons/location.svg")
                   div.form-group
                     button.btn.btn-primary.btn-block(type="submit") Submit
