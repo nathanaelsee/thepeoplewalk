@@ -2,18 +2,7 @@ extends layout
 
 block content
   script.
-
-    //- var suggestions = new Bloodhound({
-    //-   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-    //-   queryTokenizer: Bloodhound.tokenizers.whitespace,
-    //-   //- prefetch: '../data/films/post_1960.json',
-    //-   remote: {
-    //-     url: 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?text=%QUERY',
-    //-     wildcard: '%QUERY'
-    //-   }
-    //- });
-
-    $(document).ready(function() {
+    $(function() {
 
       // ********** ESRI ArcGIS Functions ********** //
       require([
@@ -34,48 +23,7 @@ block content
       });
       // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
 
-      var asyncResults = function() {
-        console.log("wat");
-      };
-
       // ********** Typeahead ********** //
-      var substringMatcher = function() {
-        return function(q, cb) {
-          var arr = [];
-          $.get(
-            // URL
-            "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest",{
-            // data
-              text: $('#protestLocation').val(),
-              f: "json"
-            }, function(data) {
-            // function if success
-              console.log(data.suggestions);
-              for (var i = 0; i < data.suggestions.length; i++) {
-                console.log(data.suggestions[i]);
-                arr.push(data.suggestions[i].text);
-              }
-              console.log(arr);
-              cb(["a","b"]);
-            },
-            // dataType
-            'json'
-          );
-          //- cb(["a","b"]);
-        };
-      };
-
-      var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-        'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-        'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-        'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-        'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-        'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-        'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-        'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-      ];
-
       $('#protestLocation').typeahead({
         highlight: true
       }, {
@@ -93,62 +41,22 @@ block content
           }, 'json');
         },
       });
-
-      //- // Searchbar Listener
-      //- $('#protestLocation').keyup(function() {
-      //-   $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
-      //-     text: $('#protestLocation').val(),
-      //-     f: "json"
-      //-   }, function(data) {
-      //-     console.log(data);
-      //-     $('#protestLocation .typeahead').typeahead({
-      //-       hint: true,
-      //-       highlight: true,
-      //-       minLength: 1
-      //-     },
-      //-     {
-      //-       name: 'states',
-      //-       source: substringMatcher(states)
-      //-     });
-      //-   });
-      //- });
       // !!!!!!!!!! Typeahead !!!!!!!!!! //
     });
+
     $(function() {
       $('#pingForm').submit(function(event) {
         //- console.log($('#protestDescription').val());
         event.preventDefault(); // Stops browser from navigating away from page
-        var data = $("#protestDescription").serialize();
+        //- var data = $("#protestDescription").serialize();
+        var data = $('#protestLocation').typeahead('val');
         console.log(data);
         // build a json object or do something with the form, store in data
         $.post('/', data, function(resp) {
-          alert(data);
-          // do something when it was successful
+          console.log(data);
         });
       });
     });
-
-  //- div.top
-  //-   form.form-horizontal(method="post", id="loginForm")
-  //-     label Username
-  //-     input.span3(id="username", type="text", name="User", placeholder="Enter your username")
-  //-     label Password
-  //-     input.span3(id="password", type="password", name="Password")
-  //-     input.btn(type="submit", value="Log In")
-  //- div.container
-  //-   div.content
-  //-     table.table.table-striped
-  //-       thead
-  //-         tr
-  //-           th Table
-  //-           th Heading
-  //-       tbody
-  //-         tr
-  //-           td Blah
-  //-           td Test
-  //-         tr
-  //-           td Hello
-  //-           td World
 
   div.container-fluid
     div.row.d-flex
@@ -156,7 +64,6 @@ block content
         div.card.text-center
           div.card-block
             h3.card-title.mb-3 People are protesting.
-            //- form#pingForm(method="post", action="/")
             div.row
               div.col-md-10.offset-md-1
                 form#pingForm
@@ -175,5 +82,3 @@ block content
             div#map
 
   div.footer
-
-  //- script(src='/js/bootstrap3-typeahead.js')
