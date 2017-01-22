@@ -6,6 +6,7 @@ block content
     // GLOBALS
     var map;
     var point;
+    var llToXY;
     var esri_singleLine;
     var esri_magicKey;
 
@@ -15,12 +16,13 @@ block content
       require([
         "esri/map",
         "esri/geometry/Point",
+        "esri/geometry/webMercatorUtils",
         "esri/Color",
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
         "dojo/domReady!"
 
-      ], function (Map, Point, Color, FeatureLayer, SimpleRenderer) {
+      ], function (Map, Point, webMercatorUtils, Color, FeatureLayer, SimpleRenderer) {
 
         var pingLayer = new FeatureLayer("https://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0", {
           mode: FeatureLayer.MODE_ONDEMAND,
@@ -36,7 +38,11 @@ block content
           zoom: 6
         });
 
-        point = new Point(-118.15, 33.80);
+        point = new Point();
+
+        llToXY = function(lng, lat) {
+          return webMercatorUtils.lngLatToXY(lng, lat);
+        }
 
         var renderer = new SimpleRenderer({});
         renderer.setVisualVariables([
@@ -92,7 +98,6 @@ block content
             f: "json",
             maxSuggestions: 3
           }, function(data) {
-            console.log(data.suggestions);
             asyncResults(data.suggestions);
           }, 'json');
         }
@@ -106,8 +111,6 @@ block content
         $('.typeahead').typeahead('close');
         esri_magicKey = suggestion.magicKey;
         esri_singleLine = suggestion.text;
-        console.log(esri_magicKey);
-        console.log(esri_singleLine);
       });
       
       $('#locationButton').click(function(event) {
@@ -123,9 +126,14 @@ block content
       });
 
       $('#pingForm').submit(function(event) {
-        event.preventDefault(); // Stops browser from navigating away from page
+        event.preventDefault();
+
+        // validation
+
+        var xy = llToXY(point.getLongitude(), point.getLatitude());
+        var geom = { x: xy[0], y: xy[1] }; 
         var features = [{
-          geometry: { x: point.x, y: point.y },
+          geometry: geom,
           attributes: {
             purpose: $('#protestDescription').val(),
             time: $.now()
@@ -134,6 +142,8 @@ block content
         data = "f=json&features=" + JSON.stringify(features);
         // build a json object or do something with the form, store in data
         $.post("http://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0/addFeatures", data, function(resp) {
+          $('#pingButton').addClass("btn-success").attr("disabled", "").text("Submitted");
+
           console.log(resp);
         }, 'json');
       });
@@ -160,7 +170,7 @@ block content
                       button#locationButton.btn.btn-secondary(type="button")
                         img(src="assets/icons/location.svg")
                   div.form-group
-                    button.btn.btn-primary.btn-block(type="submit") Submit
+                    button#pingButton.btn.btn-primary.btn-block(type="submit") Submit
       div.col-lg-8.col-md-7
         div.card
           div.card.block
