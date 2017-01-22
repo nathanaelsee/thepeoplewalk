@@ -2,24 +2,34 @@ extends layout
 
 block content
   script.
-    $(function() {
 
-      // ********** ESRI ArcGIS Functions ********** //
+    // GLOBALS
+    var map;
+    var point;
+    var llToXY;
+    var esri_singleLine;
+    var esri_magicKey;
+
+    $(function() {
+    // ********** ESRI ArcGIS Functions ********** //
+
       require([
         "esri/map",
+        "esri/geometry/Point",
+        "esri/geometry/webMercatorUtils",
         "esri/Color",
         "esri/layers/FeatureLayer",
         "esri/renderers/HeatmapRenderer",
         "dojo/domReady!"
 
-      ], function (Map, Color, FeatureLayer, HeatmapRenderer){
+      ], function (Map, Point, webMercatorUtils, Color, FeatureLayer, HeatmapRenderer) {
 
         var pingLayer = new FeatureLayer("https://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0", {
           mode: FeatureLayer.MODE_ONDEMAND,
           id: "pings"
         });
 
-        var map = new Map("map", {
+        map = new Map("map", {
           basemap: "dark-gray",
           center: [-119.11, 36.65],
           zoom: 6,
@@ -30,16 +40,24 @@ block content
           blurRadius: 20,
         });
 
+        point = new Point();
+
+        llToXY = function(lng, lat) {
+          return webMercatorUtils.lngLatToXY(lng, lat);
+        }
+
         pingLayer.setRenderer(renderer);
 
         map.addLayer(pingLayer);
-
       });
-      // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
+    
+    // !!!!!!!!!! ESRI ArcGIS Functions !!!!!!!!!! //
 
-      // ********** Typeahead ********** //
+    // ********** Typeahead ********** //
+
       $('#protestLocation').typeahead({
-        highlight: true
+        highlight: true,
+        minLength: 3
       }, {
         name: 'suggestions',
         limit: 11,
@@ -50,27 +68,60 @@ block content
             f: "json",
             maxSuggestions: 3
           }, function(data) {
-            console.log(data.suggestions);
             asyncResults(data.suggestions);
           }, 'json');
-        },
+        }
       });
-      // !!!!!!!!!! Typeahead !!!!!!!!!! //
+    
+    // !!!!!!!!!! Typeahead !!!!!!!!!! //
+
+    // ********** Events ********** //
+
+      $('.typeahead').on('typeahead:select typeahead:autocomplete', function(event, suggestion) {
+        $('.typeahead').typeahead('close');
+        esri_magicKey = suggestion.magicKey;
+        esri_singleLine = suggestion.text;
+      });
+      
+      $('#locationButton').click(function(event) {
+        $.get("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates", {
+          singleLine: esri_singleLine,
+          magicKey: esri_magicKey,
+          f: "json"
+        }, function(data) {
+          point.setX(data.candidates[0].location.x);
+          point.setY(data.candidates[0].location.y);
+          map.centerAndZoom(point, 10);
+        }, 'json');
+      });
+
+      $('#pingForm').submit(function(event) {
+        event.preventDefault();
+
+        // validation
+
+        var xy = llToXY(point.getLongitude(), point.getLatitude());
+        var geom = { x: xy[0], y: xy[1] }; 
+        var features = [{
+          geometry: geom,
+          attributes: {
+            purpose: $('#protestDescription').val(),
+            time: $.now()
+          }
+        }];
+        data = "f=json&features=" + JSON.stringify(features);
+        // build a json object or do something with the form, store in data
+        $.post("http://services7.arcgis.com/mJEg4IUE4wGzxmYR/arcgis/rest/services/thepeoplewalk/FeatureServer/0/addFeatures", data, function(resp) {
+          $('#pingButton').addClass("btn-success").attr("disabled", "").text("Submitted");
+
+          console.log(resp);
+        }, 'json');
+      });
+
+    // !!!!!!!!!! Events !!!!!!!!!! //
+
     });
 
-    $(function() {
-      $('#pingForm').submit(function(event) {
-        //- console.log($('#protestDescription').val());
-        event.preventDefault(); // Stops browser from navigating away from page
-        //- var data = $("#protestDescription").serialize();
-        var data = $('#protestLocation').typeahead('val');
-        console.log(data);
-        // build a json object or do something with the form, store in data
-        $.post('/', data, function(resp) {
-          console.log(data);
-        });
-      });
-    });
 
   div.container-fluid
     div.row.d-flex
@@ -86,10 +137,10 @@ block content
                   div.form-group.input-group
                     input#protestLocation.form-control.typeahead(type="text", name="protestLocation", placeholder="Where?")
                     span.input-group-btn
-                      button.btn.btn-secondary(type="button")
+                      button#locationButton.btn.btn-secondary(type="button")
                         img(src="assets/icons/location.svg")
                   div.form-group
-                    button.btn.btn-primary.btn-block(type="submit") Submit
+                    button#pingButton.btn.btn-primary.btn-block(type="submit") Submit
       div.col-lg-8.col-md-7
         div.card
           div.card.block
